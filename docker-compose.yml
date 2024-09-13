@@ -1,0 +1,28 @@
+services:
+  rustapp:
+    container_name: rustapp
+    image: test/rustapp:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+    ports:
+      - '8000:8000'
+    depends_on:
+      - dbrust
+
+  dbrust:
+    container_name: dbrust
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:                   
+      - '5431:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
